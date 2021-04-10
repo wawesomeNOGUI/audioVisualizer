@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 
 <html>
+<body style="margin: 0; padding: 0;">
   <canvas id="myCanvas"></canvas>
   <audio id="myAudio" ></audio>
 
 <script>
+document.body.scrollTop = 0; // <-- pull the page to the top
+document.body.style.overflow = 'hidden'; // <-- To hide scrollbar
+
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 var dataArray;
 var analyser;
@@ -19,7 +25,12 @@ function draw(){
   //console.log(dataArray[dataArray.length/2]);
 
   for(var i = 0; i<dataArray.length; i++){
-    ctx.fillRect(i*2, dataArray[i] / 128.0 * canvas.height / 2 , 2, 2)
+    if(canvas.width <= dataArray.length){
+      ctx.fillRect(i * (dataArray.length/canvas.width), dataArray[i] / 128.0 * canvas.height / 2 , 2, 2);
+    }else{
+      ctx.fillRect(i * (canvas.width/dataArray.length), dataArray[i] / 128.0 * canvas.height / 2 , 2, 2);
+    }
+
   }
 
   //console.log("hi")
@@ -42,10 +53,7 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
 
   var bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
-  console.log(dataArray.length)
-
-  canvas.width = dataArray.length*2;
-  canvas.height = 500;
+  console.log(dataArray.length);
 
   audioSource = audioCtx.createMediaStreamSource(stream);
 
@@ -55,8 +63,15 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
   requestAnimationFrame(draw);
 });
 
+window.addEventListener("resize", function(){
+  console.log("yeet");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+})
+
 
 
 
 </script>
+</body>
 </html>

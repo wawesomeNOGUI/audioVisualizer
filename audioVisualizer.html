@@ -2,17 +2,60 @@
 
 <html>
   <canvas id="myCanvas"></canvas>
-  <audio id="myAudio" autoplay controls></audio>
+  <audio id="myAudio" ></audio>
 
 <script>
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+
+var dataArray;
+var analyser;
+
+function draw(){
+  analyser.getByteTimeDomainData(dataArray);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  //console.log(dataArray[dataArray.length/2]);
+
+  for(var i = 0; i<dataArray.length; i++){
+    ctx.fillRect(i*2, dataArray[i] / 128.0 * canvas.height / 2 , 2, 2)
+  }
+
+  //console.log("hi")
+  requestAnimationFrame(draw);
+}
+
+
 
 navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function(stream){
   audioStreams = stream.getAudioTracks();
   console.log(audioStreams);
-  document.getElementById("myAudio").srcObject = stream;
+  //document.getElementById("myAudio").srcObject = stream;
 
+  var audioCtx = new AudioContext();
+  analyser = audioCtx.createAnalyser();
+  analyser.minDecibels = -90;
+  analyser.maxDecibels = -10;
+  analyser.smoothingTimeConstant = 0.85;
+  analyser.fftSize = 2048;
 
+  var bufferLength = analyser.frequencyBinCount;
+  dataArray = new Uint8Array(bufferLength);
+  console.log(dataArray.length)
+
+  canvas.width = dataArray.length*2;
+  canvas.height = 500;
+
+  audioSource = audioCtx.createMediaStreamSource(stream);
+
+  audioSource.connect(analyser);
+  //analyser.connect(audioCtx.destination);
+
+  requestAnimationFrame(draw);
 });
+
+
 
 
 </script>

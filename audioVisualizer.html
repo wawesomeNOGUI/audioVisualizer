@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+  <canvas id="myCanvas"></canvas>
+  <audio id="myAudio" autoplay controls></audio>
+
+<script>
+
+navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function(stream){
+  audioStreams = stream.getAudioTracks();
+  console.log(audioStreams);
+  document.getElementById("myAudio").srcObject = stream;
+
+
+});
+
+
+</script>
+</html>

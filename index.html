@@ -38,7 +38,7 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
   analyser.minDecibels = -90;
   analyser.maxDecibels = -10;
   analyser.smoothingTimeConstant = 0.85;
-  analyser.fftSize = 2048;
+  analyser.fftSize = 1024;  //default 2048
 
   var bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);

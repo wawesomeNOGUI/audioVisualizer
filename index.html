@@ -3,7 +3,6 @@
 <html>
 <body style="margin: 0; padding: 0; background-color: black;">
   <canvas id="myCanvas"></canvas>
-  <audio id="myAudio" ></audio>
 
 <script>
 document.body.scrollTop = 0; // <-- pull the page to the top
@@ -18,7 +17,7 @@ var dataArray;
 var analyser;
 
 //========Settings========
-var fftSize = 8192;      //how many samples to take for a Fast Fourier Transform
+var fftSize = 8192;      //how many samples to take for a Fast Fourier Transform (default 2048)
 var startOffset = 20;    //anything below 20 Hz is inaudible
 var endCutoff = Math.floor(fftSize/2.25);  //cutoff high frequencies not usually used in music
 var freqInc = 1;         //How much to increment each loop used to skip over some frequencies in dataArray (if freqInc != 1)
@@ -45,12 +44,37 @@ function draw(){
   requestAnimationFrame(draw);
 }
 
+var elem = document.getElementById("myCanvas");
+
+function openFullscreen() {
+
+if(!document.fullscreenElement){     //if not in fullscreen enter fullscreen else exit fullscreen
+	if (elem.requestFullscreen) {
+		elem.requestFullscreen();
+		console.log("used standard");
+	} else if (elem.mozRequestFullScreen) { /* Firefox */
+		elem.mozRequestFullScreen();
+		console.log("used firefox");
+	} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+		elem.webkitRequestFullscreen();
+		console.log("used chrome");
+	}else if (elem.msRequestFullscreen) { /* IE/Edge ???? Edge use the chrome one? Also requires some kind of user action like html button to work*/
+		elem.msRequestFullscreen();
+		console.log("used edge");
+	}
+	console.log("yep");
+
+	}else{
+	document.exitFullscreen();
+}
+
+}
+
 
 
 navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function(stream){
   audioStreams = stream.getAudioTracks();
   console.log(audioStreams);
-  //document.getElementById("myAudio").srcObject = stream;
 
   var audioCtx = new AudioContext();
   analyser = audioCtx.createAnalyser();
@@ -71,11 +95,39 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
   requestAnimationFrame(draw);
 });
 
+
+
 window.addEventListener("resize", function(){
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 })
 
+
+var toggle = true;
+window.addEventListener("keydown", function(e){
+  console.log(e.which)
+  if(toggle && e.which == 70){  //70 == "f"
+    openFullscreen();
+    toggle = false;
+  }
+})
+
+window.addEventListener("keyup", function(e){
+  if(toggle == false && e.which == 70){
+    toggle = true;
+  }
+})
+
+var cursorToggle = true;
+window.addEventListener("mousedown", function(e){
+  if(cursorToggle == false){
+    document.getElementById("myCanvas").style = "cursor: none";
+    cursorToggle = true;
+  }else{
+    document.getElementById("myCanvas").style = "cursor: auto";
+    cursorToggle = false;
+  }
+})
 
 
 

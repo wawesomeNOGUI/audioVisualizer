@@ -7,6 +7,7 @@ The height of each bar represents the decibel value for each frequency.
 - To start sharing the audio being output from your device, you need to select share your entire screen and share audio.
 - Press "f" to enter fullscreen
 - Click anywhere to make the mouse disappear.
+
 Hope you enjoy the visuals!
 
 Further reading:

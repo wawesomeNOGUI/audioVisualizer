@@ -17,6 +17,13 @@ canvas.height = window.innerHeight;
 var dataArray;
 var analyser;
 
+//========Settings========
+var fftSize = 2048;      //how many samples to take for a Fast Fourier Transform
+var startOffset = 20;    //anything below 20 Hz is inaudible
+var endCutoff = Math.floor(fftSize/2.25);  //cutoff high frequencies not usually used in music
+var freqInc = 1;             //How many frequencies to increment each loop
+//========================
+
 function draw(){
   //analyser.getByteTimeDomainData(dataArray);
   analyser.getByteFrequencyData(dataArray);
@@ -25,13 +32,16 @@ function draw(){
 
   //console.log(dataArray[dataArray.length/2]);
 
-  for(var i = 20; i<dataArray.length/2; i++){  //anything below 20 Hz is inaudible
+  for(var i = startOffset; i<dataArray.length-endCutoff; i += freqInc){
+
+      if(dataArray[i] == 255){
+        console.log("max decibels reached " + i);
+      }
       ctx.fillStyle = "#"+i +""+i+""+i;
-      ctx.fillRect((i-20) * (canvas.width/(dataArray.length/2-20)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, canvas.height);
+      ctx.fillRect((i-startOffset) * (canvas.width/(dataArray.length-endCutoff-startOffset)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, canvas.height);
 
   }
 
-  //console.log("hi")
   requestAnimationFrame(draw);
 }
 
@@ -44,10 +54,10 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
 
   var audioCtx = new AudioContext();
   analyser = audioCtx.createAnalyser();
-  analyser.minDecibels = -90;
-  analyser.maxDecibels = -10;
+  analyser.minDecibels = -90;  //default -100
+  analyser.maxDecibels = -10;  //default -30
   analyser.smoothingTimeConstant = 0.85;  //default 0.8
-  analyser.fftSize = 8192;  //default 2048
+  analyser.fftSize = fftSize;  //default 2048
 
   var bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
@@ -62,7 +72,6 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
 });
 
 window.addEventListener("resize", function(){
-  console.log("yeet");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 })

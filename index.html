@@ -36,7 +36,17 @@ function draw(){
       if(dataArray[i] == 255){
         console.log("max decibels reached " + i);
       }
-      ctx.fillStyle = "#"+i +""+i+""+i;
+
+      // Create gradient
+      var grd = ctx.createLinearGradient(0, canvas.height, canvas.width, 0);
+      grd.addColorStop(0, "red");
+      grd.addColorStop(0.14, "orange");
+      grd.addColorStop(0.28, "yellow");
+      grd.addColorStop(0.42, "green");
+      grd.addColorStop(0.56, "blue");
+      grd.addColorStop(0.70, "indigo");
+      grd.addColorStop(1, "violet");
+      ctx.fillStyle = grd;
       ctx.fillRect((i-startOffset) * (canvas.width/(dataArray.length-endCutoff-startOffset)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, canvas.height);
 
   }

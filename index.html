@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html>
-<body style="margin: 0; padding: 0;">
+<body style="margin: 0; padding: 0; background-color: black;">
   <canvas id="myCanvas"></canvas>
   <audio id="myAudio" ></audio>
 
@@ -20,16 +20,16 @@ var analyser;
 function draw(){
   //analyser.getByteTimeDomainData(dataArray);
   analyser.getByteFrequencyData(dataArray);
+  //https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getByteFrequencyData
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   //console.log(dataArray[dataArray.length/2]);
 
-  for(var i = 0; i<dataArray.length; i++){
-    if(canvas.width <= dataArray.length){
-      ctx.fillRect(i * (dataArray.length/canvas.width), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, 2);
-    }else{
-      ctx.fillRect(i * (canvas.width/dataArray.length), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1, 2, 2);
-    }
+  for(var i = 20; i<dataArray.length; i++){  //anything below 20 Hz is inaudible
+
+      ctx.fillStyle = "white";
+      ctx.fillRect((i-20) * (canvas.width/(dataArray.length-20)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, 2);
+
 
   }
 
@@ -48,8 +48,8 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
   analyser = audioCtx.createAnalyser();
   analyser.minDecibels = -90;
   analyser.maxDecibels = -10;
-  analyser.smoothingTimeConstant = 0.85;
-  analyser.fftSize = 2048;  //default 2048
+  analyser.smoothingTimeConstant = 0.85;  //default 0.8
+  analyser.fftSize = 512;  //default 2048
 
   var bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);

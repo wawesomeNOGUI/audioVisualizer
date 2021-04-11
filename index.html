@@ -25,11 +25,9 @@ function draw(){
 
   //console.log(dataArray[dataArray.length/2]);
 
-  for(var i = 20; i<dataArray.length; i++){  //anything below 20 Hz is inaudible
-
-      ctx.fillStyle = "white";
-      ctx.fillRect((i-20) * (canvas.width/(dataArray.length-20)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, 2);
-
+  for(var i = 20; i<dataArray.length/2; i++){  //anything below 20 Hz is inaudible
+      ctx.fillStyle = "#"+i +""+i+""+i;
+      ctx.fillRect((i-20) * (canvas.width/(dataArray.length/2-20)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, canvas.height);
 
   }
 
@@ -49,7 +47,7 @@ navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then(function
   analyser.minDecibels = -90;
   analyser.maxDecibels = -10;
   analyser.smoothingTimeConstant = 0.85;  //default 0.8
-  analyser.fftSize = 512;  //default 2048
+  analyser.fftSize = 8192;  //default 2048
 
   var bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);

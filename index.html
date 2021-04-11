@@ -21,7 +21,7 @@ var analyser;
 var fftSize = 2048;      //how many samples to take for a Fast Fourier Transform
 var startOffset = 20;    //anything below 20 Hz is inaudible
 var endCutoff = Math.floor(fftSize/2.25);  //cutoff high frequencies not usually used in music
-var freqInc = 1;             //How much to increment each loop used to skip over some frequencies in dataArray (if freqInc != 1)
+var freqInc = 1;         //How much to increment each loop used to skip over some frequencies in dataArray (if freqInc != 1)
 //========================
 
 function draw(){

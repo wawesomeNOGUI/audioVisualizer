@@ -52,9 +52,11 @@ function draw(){
       ctx.fillRect((i-startOffset) * (canvas.width/(dataArray.length-endCutoff-startOffset)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, canvas.height);
 
       //Check for mouse movement stopping
-      mouseDisappearTimer--;
       if(mouseDisappearTimer == 0){
           document.getElementById("myCanvas").style = "cursor: none";
+          mouseDisappearTimer--;  //to set  mouseDisappearTimer = -1 when mouse set to not showing
+      }else{
+         mouseDisappearTimer--;
       }
   }
 

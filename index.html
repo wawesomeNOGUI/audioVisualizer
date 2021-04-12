@@ -13,6 +13,8 @@ var ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+var mouseDisappearTimer = 60000; 
+
 var dataArray;
 var analyser;
 
@@ -49,6 +51,11 @@ function draw(){
       ctx.fillStyle = grd;
       ctx.fillRect((i-startOffset) * (canvas.width/(dataArray.length-endCutoff-startOffset)), (dataArray[i] / 128.0 * canvas.height / 2) *-1 + canvas.height-1 , 2, canvas.height);
 
+      //Check for mouse movement stopping
+      mouseDisappearTimer--;
+      if(mouseDisappearTimer == 0){
+          document.getElementById("myCanvas").style = "cursor: none";
+      }
   }
 
   requestAnimationFrame(draw);
@@ -128,15 +135,13 @@ window.addEventListener("keyup", function(e){
   }
 })
 
-var cursorToggle = true;
 window.addEventListener("mousedown", function(e){
-  if(cursorToggle == false){
-    document.getElementById("myCanvas").style = "cursor: none";
-    cursorToggle = true;
-  }else{
-    document.getElementById("myCanvas").style = "cursor: auto";
-    cursorToggle = false;
-  }
+  openFullscreen();
+})
+
+window.addEventListener("mousemove", function(e){
+  mouseDisappearTimer = 60000;
+  document.getElementById("myCanvas").style = "cursor: auto";
 })
 
 

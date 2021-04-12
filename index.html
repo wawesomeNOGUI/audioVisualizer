@@ -55,7 +55,7 @@ function draw(){
       if(mouseDisappearTimer == 0){
           document.getElementById("myCanvas").style = "cursor: none";
           mouseDisappearTimer--;  //to set  mouseDisappearTimer = -1 when mouse set to not showing
-      }else{
+      }else if(mouseDisappearTimer != -1){
          mouseDisappearTimer--;
       }
   }

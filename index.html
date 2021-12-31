@@ -26,8 +26,8 @@ var freqInc = 1;         //How much to increment each loop used to skip over som
 //========================
 
 function draw(){
-  analyser.getByteTimeDomainData(dataArray);
-  //analyser.getByteFrequencyData(dataArray);
+  //analyser.getByteTimeDomainData(dataArray);
+  analyser.getByteFrequencyData(dataArray);
   //https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getByteFrequencyData
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 

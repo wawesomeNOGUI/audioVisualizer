@@ -4,7 +4,7 @@
 <body style="margin: 0; padding: 0; background-color: black;">
   <canvas id="myCanvas"></canvas>
 	
-	<button onclick="requestAudio();">Click To Share Desktop Audio Output</button>
+	<button id="audioButton" onclick="requestAudio();">Click To Share Desktop Audio Output</button>
 
 <script>
 document.body.scrollTop = 0; // <-- pull the page to the top
@@ -114,6 +114,8 @@ function requestAudio() {
     //analyser.connect(audioCtx.destination);
 
     requestAnimationFrame(draw);
+	  
+    document.getElementById("audioButton").remove();
   });
 }
 
